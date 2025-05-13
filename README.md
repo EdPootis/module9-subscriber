@@ -12,3 +12,9 @@ b. What does it mean? `guest:guest@localhost:5672` , what is the first **guest**
 ### Slow Subscriber Simulation
 ![Slow Subscriber Graph](SlowSubscriber.png)
 Pada simulasi *slow subscriber* saat *publisher* mengirim pesan, maka juga akan terjadi lonjakan pada grafik pertama yang menandakan *queued messages*. Hal ini terjadi karena sekarang *subscriber* disimulasikan untuk lambat dalam memproses pesan atau event yang dikirim *publisher* sehingga  kecepatan *subscriber* meng-*consume* pesan lebih kecil dari kecepatan *publiher* meng-*publish* pesannya. Akibatnya saat saya jalankan publisher 8 kali, grafik mencatat *queued messages* terbanyak sebanyak 36 pesan.
+
+### Three Slow Subscriber Simulation
+![3 Subscribers Console](ThreeSubsConsole.png)
+![3 Subscribers Graph](ThreeSubsGraph.png)
+Pada grafik jika terdapat 3 *subscriber* terlihat bahwa *queued messaged* turun lebih cepat, ini terjadi karena setiap *slow subscriber* yang ada mengambil masing-masing 1 pesan unik (tidak *overlap*) dari *queue* sehingga pesan tersebut hilang dari queue. Dibandingkan dengan 1 *slow subscriber*, dengan adanya 3 *slow subscriber* penurunan pesan yang berada dalam *queue* menjadi lebih cepat sehingga terlihat bahwa pada grafik *queued messages*, jumlah terbanyak yang tercatat/terekam hanya 30 kurang walaupun *publisher* tetap dijalankan 8 kali (40 pesan).<br>
+Menurut saya, dalam keadaan yang sebenarnya delay tidak hanya terjadi pada *subscriber* tetapi dapat juga terjadi saat *publisher* ingin mengirimkan pesan/*event*. Jadi untuk memerbaiki kode agar mengsimulasikan keadaan yang lebih realistis dapat ditambahkan kode delay pada *publisher* juga.
