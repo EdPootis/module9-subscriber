@@ -13,8 +13,14 @@ b. What does it mean? `guest:guest@localhost:5672` , what is the first **guest**
 ![Slow Subscriber Graph](SlowSubscriber.png)
 Pada simulasi *slow subscriber* saat *publisher* mengirim pesan, maka juga akan terjadi lonjakan pada grafik pertama yang menandakan *queued messages*. Hal ini terjadi karena sekarang *subscriber* disimulasikan untuk lambat dalam memproses pesan atau event yang dikirim *publisher* sehingga  kecepatan *subscriber* meng-*consume* pesan lebih kecil dari kecepatan *publiher* meng-*publish* pesannya. Akibatnya saat saya jalankan publisher 8 kali, grafik mencatat *queued messages* terbanyak sebanyak 36 pesan.
 
-### Three Slow Subscriber Simulation
+### Three Slow Subscribers Simulation
 ![3 Subscribers Console](ThreeSubsConsole.png)
 ![3 Subscribers Graph](ThreeSubsGraph.png)
 Pada grafik jika terdapat 3 *subscriber* terlihat bahwa *queued messaged* turun lebih cepat, ini terjadi karena setiap *slow subscriber* yang ada mengambil masing-masing 1 pesan unik (tidak *overlap*) dari *queue* sehingga pesan tersebut hilang dari queue. Dibandingkan dengan 1 *slow subscriber*, dengan adanya 3 *slow subscriber* penurunan pesan yang berada dalam *queue* menjadi lebih cepat sehingga terlihat bahwa pada grafik *queued messages*, jumlah terbanyak yang tercatat/terekam hanya 30 kurang walaupun *publisher* tetap dijalankan 8 kali (40 pesan).<br>
 Menurut saya, dalam keadaan yang sebenarnya delay tidak hanya terjadi pada *subscriber* tetapi dapat juga terjadi saat *publisher* ingin mengirimkan pesan/*event*. Jadi untuk memerbaiki kode agar mengsimulasikan keadaan yang lebih realistis dapat ditambahkan kode delay pada *publisher* juga.
+
+
+## Bonus
+### Slow Subscriber Simulation (Cloud)
+![Bonus3](BonusSlowSubscriber.png)
+Pada grafik RabbitMQ yang dijalankan di *cloud* terdapat perbedaan yang cukup jelas. Pada grafik *queued messages*, grafiknya yang awalnya seperti lonjakan yang tajam yang naik secara cepat dan turun perlahan, di *cloud* grafiknya naik secara perlahan dan sempat datar lalu baru menurun secara perlahan. Hal ini berkaitan dengan grafik kedua, pada *localhost* garis merah atau pesan yang dikirim sempat naik sekilas dan turun dengan cepat juga, tetapi di *cloud* dikarenakan adanya *latency* antara server *cloud* (yang berlokasi di US) maka pengiriman pesan oleh *publisher* menjadi terhambat karena menunggu jaringan terhubung dengan server *cloud*, akibatnya pengiriman pesan tersebar dalam interval yang lebih lama dengan intensitas/nilai kecepatan yang lebih rendah. Karena hal itu, *subscriber* dapat hampir "mengikuti" pengiriman pesan yang banyak oleh *publisher* sehingga *queued messages* yang terekam lebih sedikit. *Subscriber* tidak dipengaruhi oleh *latency* server *cloud* RabbitMQ *subscriber* hanya perlu membuat koneksi sekali, sementara *publisher* membuat koneksi setiap kali dijalankan (setiap 5 pesan/*event* dikirim).
