@@ -8,3 +8,7 @@ a. What is amqp?
 
 b. What does it mean? `guest:guest@localhost:5672` , what is the first **guest**, and what is the second **guest**, and what is **localhost:5672** is for?
 - `guest:guest@localhost:5672` adalah URL koneksi untuk menyambung ke AMQP broker seperti RabbitMQ yang dijalankan di lokal. **guest** pertama adalah username yang ingin digunakan untuk *login*. **guest** kedua adalah password yang ingin digunakan. Dan **localhost:5672** menunjukkan bahwa koneksi ditujukan ke komputer local (`localhost`) di port 5672, yang juga merpakan **default port** untuk protokol AMQP.
+
+### Slow Subscriber Simulation
+![Slow Subscriber Graph](SlowSubscriber.png)
+Pada simulasi *slow subscriber* saat *publisher* mengirim pesan, maka juga akan terjadi lonjakan pada grafik pertama yang menandakan *queued messages*. Hal ini terjadi karena sekarang *subscriber* disimulasikan untuk lambat dalam memproses pesan atau event yang dikirim *publisher* sehingga  kecepatan *subscriber* meng-*consume* pesan lebih kecil dari kecepatan *publiher* meng-*publish* pesannya. Akibatnya saat saya jalankan publisher 8 kali, grafik mencatat *queued messages* terbanyak sebanyak 36 pesan.
